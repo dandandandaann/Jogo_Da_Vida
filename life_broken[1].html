@@ -2,7 +2,7 @@
 
 <head>
     <script type="text/javascript">
-    var Board, CurrentBoard;
+    var Board, CurrentBoard, timer;
     var xsize = 10;
     var ysize = 10;
 
@@ -16,13 +16,13 @@
                 var ax = x + dx;
                 var ay = y + dy;
 
-                if(ax < 0) ax = xsize - 1;
-                if(ay < 0) ay = ysize - 1;
+                if (ax < 0) ax = xsize - 1;
+                if (ay < 0) ay = ysize - 1;
 
-                if(ax >= xsize) ax = 0;
-                if(ay >= ysize) ay = 0;
+                if (ax >= xsize) ax = 0;
+                if (ay >= ysize) ay = 0;
 
-                if(x != ax || y != ay)
+                if (x != ax || y != ay)
                     if (CurrentBoard[ax][ay] == alive) ++n;
             }
         return n;
@@ -56,14 +56,14 @@
             Text += "<br/>";
         }
         // Copy Board without reference
-        CurrentBoard = JSON.parse(JSON.stringify(Board)); 
+        CurrentBoard = JSON.parse(JSON.stringify(Board));
 
         document.getElementById("board").innerHTML = Text;
     }
 
     function Main() {
         // *** Change this variable to choose a different baord setup from below
-        var BoardSetup = "glider";
+        var BoardSetup = "blinker";
 
         Board = new Array(xsize);
         for (var x = 0; x < xsize; ++x) {
@@ -105,6 +105,25 @@
 
         DrawBoard(Board);
     }
+
+    function Run()
+    {
+    	NextStep(Board);
+    	DrawBoard(Board);
+    }
+
+    function Start() {
+        if (!timer) {
+            timer = setInterval(Run, 300);
+        }
+    }
+
+    function Stop() {
+        if (timer) {
+            clearInterval(timer);
+            timer = null;
+        }
+    }
     </script>
 </head>
 
@@ -112,6 +131,9 @@
     <div id="board">
     </div>
     <a href="#IGoNowhere" onclick="NextStep(Board);DrawBoard(Board);">Next -></a>
+    <br/>
+    <a href="#" onclick="Start();">Start</a>
+    <a href="#" onclick="Stop();">Stop</a>
 </body>
 
 </html>
