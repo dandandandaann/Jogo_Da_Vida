@@ -51,9 +51,12 @@
     function DrawBoard(Board) {
         var Text = "";
         for (var y = 0; y < ysize; ++y) {
+            Text += "<div class='row'>";
             for (var x = 0; x < xsize; ++x)
-                Text += Board[x][y] == alive ? "o" : "_";
-            Text += "<br/>";
+                Text += Board[x][y] == alive ?
+                "<div class='box alive'></div>" :
+                "<div class='box dead'></div>";
+            Text += "</div>";
         }
         // Copy Board without reference
         CurrentBoard = JSON.parse(JSON.stringify(Board));
@@ -63,7 +66,7 @@
 
     function Main() {
         // *** Change this variable to choose a different baord setup from below
-        var BoardSetup = "blinker";
+        var BoardSetup = "glider";
 
         Board = new Array(xsize);
         for (var x = 0; x < xsize; ++x) {
@@ -106,15 +109,14 @@
         DrawBoard(Board);
     }
 
-    function Run()
-    {
-    	NextStep(Board);
-    	DrawBoard(Board);
+    function Run() {
+        NextStep(Board);
+        DrawBoard(Board);
     }
 
     function Start() {
         if (!timer) {
-            timer = setInterval(Run, 300);
+            timer = setInterval(Run, 100);
         }
     }
 
@@ -125,10 +127,40 @@
         }
     }
     </script>
+    <style type="text/css">
+    .alive {
+        background: white;
+    }
+    .dead {
+        background: black;
+    }
+    .box {
+        margin: 0;
+        flex: 1 0 auto;
+        position: relative;
+        border: 1px solid lightgrey;
+    }
+    .box:after {
+        content: "";
+        float: left;
+        display: block;
+        padding-top: 100%;
+    }
+    .row {
+        display: flex;
+    }
+    .board {
+        width: 80vw;
+        max-width: 60vh;
+        height: 80vw;
+        max-height: 60vh;
+        font-size: 1rem;
+    }
+    </style>
 </head>
 
 <body onload="Main()">
-    <div id="board">
+    <div id="board" class="board">
     </div>
     <a href="#IGoNowhere" onclick="NextStep(Board);DrawBoard(Board);">Next -></a>
     <br/>
